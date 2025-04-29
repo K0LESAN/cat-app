@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 let mode = 'development';
 
@@ -20,6 +21,9 @@ module.exports = {
   target: 'web',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      '@': path.resolve(__dirname, 'src/'),
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -41,22 +45,31 @@ module.exports = {
         use: [
           mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
-          'sass-loader',
           'postcss-loader',
+          'sass-loader',
         ],
       },
       {
-        test: /\.(png|jpe?g|webp)$/i,
+        test: /\.(png|jpe?g|webp|svg|ttf)$/i,
         type: 'asset/resource',
       },
-      {
-        test: /\.ttf$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.svg$/i,
-        type: 'asset/source',
-      },
+    ],
+  },
+  optimization: {
+    minimizer: [
+      '...',
+      new ImageMinimizerPlugin({
+        minimizer: {
+          implementation: ImageMinimizerPlugin.imageminMinify,
+          options: {
+            plugins: [
+              ['gifsicle', { interlaced: true }],
+              ['jpegtran', { progressive: true }],
+              ['optipng', { optimizationLevel: 5 }],
+            ],
+          },
+        },
+      }),
     ],
   },
   output: {
