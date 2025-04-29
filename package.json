@@ -1,0 +1,16 @@
+{
+  "name": "cat-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "react",
+    "typescript",
+    "webpack"
+  ],
+  "author": "k0lesan2k00@gmail.com",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}
